@@ -1,6 +1,7 @@
 import React from 'react';
 import type { AuditEntryView, CoreEntryDraft, RiskLevel, SimilarAuditEntry } from '../types/AuditEntry.js';
 import SimilarMatches from './SimilarMatches.js';
+import Button from '../../../shared/components/Button.js';
 
 interface AuditEntryRowProps {
   entry: AuditEntryView;
@@ -48,9 +49,9 @@ export default class AuditEntryRow extends React.Component<AuditEntryRowProps> {
         </>}</td>
         <td className="summary-cell">{entry.summary ?? <span className="muted">Waiting for enrichment</span>}</td>
         <td><span className={`status-badge status-${entry.status.toLowerCase()}`}><i />{entry.status}</span></td>
-        <td><button className="button button-small" disabled={entry.status !== 'COMPLETED' || similarLoading} onClick={onSearchSimilar}>
+        <td><Button size="small" disabled={entry.status !== 'COMPLETED' || similarLoading} onClick={onSearchSimilar}>
           {similarLoading ? 'Searching…' : 'Find similar'}
-        </button></td>
+        </Button></td>
       </tr>
       <tr className="detail-row"><td colSpan={6}>
         <div className="detail-grid">
@@ -58,7 +59,7 @@ export default class AuditEntryRow extends React.Component<AuditEntryRowProps> {
             <div className="inline-edit">
               <input aria-label={`Auditor note for ${entry.title}`} value={noteDraft ?? entry.auditorNotes}
                 placeholder="Add review note…" onChange={event => onNoteChange(event.currentTarget.value)} />
-              <button className="button button-small" disabled={savingNote} onClick={onSaveNotes}>{savingNote ? 'Saving…' : 'Save note'}</button>
+              <Button size="small" disabled={savingNote} onClick={onSaveNotes}>{savingNote ? 'Saving…' : 'Save note'}</Button>
             </div>
           </div>
           <details className="detail-block core-edit"><summary>Update financial evidence <span>Re-runs AI analysis</span></summary>
@@ -67,7 +68,7 @@ export default class AuditEntryRow extends React.Component<AuditEntryRowProps> {
                 value={coreDraft?.amount ?? String(entry.amount)} onChange={event => onCoreChange('amount', event.currentTarget.value)} /></label>
               <label>Evidence<input aria-label="Evidence" value={coreDraft?.evidenceText ?? entry.evidenceText}
                 onChange={event => onCoreChange('evidenceText', event.currentTarget.value)} /></label>
-              <button className="button button-small" disabled={savingCore} onClick={onRecheckCore}>{savingCore ? 'Re-queuing…' : 'Save & re-analyze'}</button>
+              <Button size="small" disabled={savingCore} onClick={onRecheckCore}>{savingCore ? 'Re-queuing…' : 'Save & re-analyze'}</Button>
             </div>
           </details>
         </div>

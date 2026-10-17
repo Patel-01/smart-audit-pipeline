@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from '../../../shared/components/Button.js';
 
 interface DashboardHeaderProps {
   onRefresh(): void;
@@ -18,7 +19,7 @@ export default class DashboardHeader extends React.Component<DashboardHeaderProp
           <h1>Audit intelligence</h1>
           <p className="subheading">Evidence in. Risk signals out. Review exceptions as they happen.</p>
         </div>
-        <button className="button button-quiet" onClick={this.props.onRefresh}>↻ Refresh stream</button>
+        <Button variant="quiet" onClick={this.props.onRefresh}>↻ Refresh stream</Button>
       </section>
     </>;
   }

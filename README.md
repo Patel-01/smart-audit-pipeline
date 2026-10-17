@@ -7,10 +7,14 @@ implements enrichment behind that contract. Their implementation details stay
 inside each module. `ApplicationContainer` is the composition root that connects
 the modules and their concrete adapters.
 
-The class-based `AuditDashboard` coordinates API state and polling. Reusable
-React class components under `client/src/components` render the header, overview,
-evidence form, audit stream, individual rows, and similarity results.
-`AuditApiClient` keeps HTTP details out of the view components.
+The frontend keeps application-wide composition and shared infrastructure in
+`client/src/app` and `client/src/shared`, while audit-owned code lives together
+under `client/src/modules/audit`. The class-based `AuditDashboardPage` owns the
+audit workflow state and composes focused class components for the header,
+overview, evidence form, audit stream, rows, and similarity results.
+`AuditApiClient` owns audit endpoints and payloads; the shared `HttpClient`
+handles only transport concerns. This avoids duplicating common plumbing without
+forcing each feature into a backend-style one-to-one structure.
 
 ## Run locally
 1. Copy `.env.example` to `.env` and set `MONGODB_URI` to a MongoDB connection string.

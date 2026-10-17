@@ -1,11 +1,10 @@
 import React from 'react';
-import AuditApiClient from './services/AuditApiClient.js';
-import type { AuditEntryView, CoreEntryDraft, NewEntryFormState, SimilarAuditEntry } from './types/AuditEntry.js';
-import DashboardHeader from './components/DashboardHeader.js';
-import AuditOverview from './components/AuditOverview.js';
-import NewEvidenceForm from './components/NewEvidenceForm.js';
-import AuditStream from './components/AuditStream.js';
-import './styles.css';
+import AuditApiClient from '../services/AuditApiClient.js';
+import type { AuditEntryView, CoreEntryDraft, NewEntryFormState, SimilarAuditEntry } from '../types/AuditEntry.js';
+import DashboardHeader from '../components/DashboardHeader.js';
+import AuditOverview from '../components/AuditOverview.js';
+import NewEvidenceForm from '../components/NewEvidenceForm.js';
+import AuditStream from '../components/AuditStream.js';
 
 interface DashboardState {
   entries: AuditEntryView[];

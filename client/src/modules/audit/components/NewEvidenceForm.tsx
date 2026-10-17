@@ -1,5 +1,6 @@
 import React from 'react';
 import type { NewEntryFormState } from '../types/AuditEntry.js';
+import Button from '../../../shared/components/Button.js';
 
 interface NewEvidenceFormProps {
   form: NewEntryFormState;
@@ -21,7 +22,7 @@ export default class NewEvidenceForm extends React.Component<NewEvidenceFormProp
         <label>Vendor / entity<input name="vendor" value={form.vendor} onChange={onChange} placeholder="e.g. Acme Supplies" required /></label>
         <label>Amount (USD)<input name="amount" type="number" min="0" step="0.01" value={form.amount} onChange={onChange} placeholder="12500" required /></label>
         <label className="evidence-field">Evidence description<input name="evidenceText" value={form.evidenceText} onChange={onChange} placeholder="Describe the transaction or control evidence" required /></label>
-        <button className="button button-primary" type="submit" disabled={saving}>{saving ? 'Submitting…' : '＋ Add evidence'}</button>
+        <Button variant="primary" type="submit" disabled={saving}>{saving ? 'Submitting…' : '＋ Add evidence'}</Button>
       </form>
     </section>;
   }
