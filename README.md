@@ -7,6 +7,11 @@ implements enrichment behind that contract. Their implementation details stay
 inside each module. `ApplicationContainer` is the composition root that connects
 the modules and their concrete adapters.
 
+The class-based `AuditDashboard` coordinates API state and polling. Reusable
+React class components under `client/src/components` render the header, overview,
+evidence form, audit stream, individual rows, and similarity results.
+`AuditApiClient` keeps HTTP details out of the view components.
+
 ## Run locally
 1. Copy `.env.example` to `.env` and set `MONGODB_URI` to a MongoDB connection string.
 2. `npm ci`
