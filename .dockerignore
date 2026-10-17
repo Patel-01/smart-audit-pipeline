@@ -5,3 +5,5 @@ npm-debug.log
 .gitignore
 client/dist
 README.md
+demo
+dist-test
