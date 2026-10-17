@@ -1,6 +1,7 @@
 import type { Types } from 'mongoose';
 
 export type AuditStatus = 'PENDING' | 'PROCESSING' | 'COMPLETED' | 'FAILED';
+export type RiskLevel = 'LOW' | 'MEDIUM' | 'HIGH';
 
 export interface AuditCoreFields {
   title: string;
@@ -13,8 +14,9 @@ export interface AuditCoreFields {
 
 export interface AuditEnrichment {
   riskScore: number;
+  riskLevel: RiskLevel;
   summary: string;
-  anomalyFlag: boolean;
+  anomalyFlags: string[];
   semanticVector: number[];
   aiProcessedAt: Date;
 }
@@ -27,8 +29,9 @@ export interface AuditEntry extends AuditCoreFields {
   createdAt: Date;
   updatedAt: Date;
   riskScore?: number;
+  riskLevel?: RiskLevel;
   summary?: string;
-  anomalyFlag?: boolean;
+  anomalyFlags?: string[];
   semanticVector?: number[];
   aiProcessedAt?: Date;
   aiError?: string;

@@ -13,8 +13,13 @@ export default class ApplicationContainer {
   readonly aiWorkerService: AIWorkerService;
 
   constructor(workerIntervalMs: number) {
+    if (process.env.MOCK_AI?.toLowerCase() === 'false') {
+      throw new Error('Live AI provider integration is not configured; set MOCK_AI=true for deterministic assessment mode.');
+    }
     const repository = new AuditRepository();
-    const aiService = new AIService(new DeterministicEnrichmentEngine());
+    const aiService = new AIService(new DeterministicEnrichmentEngine(
+      Number(process.env.AI_PROCESSING_DELAY_MS ?? 400)
+    ));
     const workerRuntime = new PendingAuditWorker(repository, aiService, workerIntervalMs);
     const mutationPolicy = new AuditMutationPolicy(new DefaultAuditMutationPlanner());
 

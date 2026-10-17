@@ -20,8 +20,22 @@ await AuditEntryModel.insertMany([
     amount: 1_800,
     transactionDate: new Date(),
     evidenceText: 'Travel receipt missing manager approval.'
+  },
+  {
+    title: 'Manual payment override',
+    vendor: 'Global Procurement Services',
+    amount: 85_000,
+    transactionDate: new Date(),
+    evidenceText: 'Urgent manual approval override bypassed the normal vendor payment control.'
+  },
+  {
+    title: 'Quarterly software renewal',
+    vendor: 'Contoso Cloud',
+    amount: 7_250,
+    transactionDate: new Date(),
+    evidenceText: 'Renewal matched the approved contract and purchase order.'
   }
 ]);
 
-console.log('Added two synthetic audit entries');
+console.log('Added four synthetic audit entries');
 await mongoose.disconnect();

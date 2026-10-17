@@ -9,7 +9,7 @@ import AIWorkerService from './AIWorkerService.js';
 import DeterministicEnrichmentEngine from '../../ai-enrichment/services/internal/DeterministicEnrichmentEngine.js';
 import PendingAuditWorker from './internal/PendingAuditWorker.js';
 
-const createAIService = () => new AIService(new DeterministicEnrichmentEngine());
+const createAIService = () => new AIService(new DeterministicEnrichmentEngine(0));
 const createWorkerService = (store: AuditStore, aiService: AuditEnricher = createAIService()) =>
   new AIWorkerService(new PendingAuditWorker(store, aiService, 1000));
 
@@ -64,7 +64,7 @@ test('worker writes enrichment to a claimed pending record', async () => {
 
   assert.equal(store.entry.status, 'COMPLETED');
   assert.equal(store.entry.semanticVector?.length, 8);
-  assert.equal(store.entry.anomalyFlag, true);
+  assert.ok(store.entry.anomalyFlags?.includes('MONETARY_THRESHOLD_EXCEEDED'));
 });
 
 test('an in-flight AI result cannot overwrite a newer financial edit', async () => {

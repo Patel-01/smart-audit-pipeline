@@ -43,8 +43,9 @@ export default class AuditRepository implements AuditStore {
         $inc: { coreRevision: 1 },
         $unset: {
           riskScore: 1,
+          riskLevel: 1,
           summary: 1,
-          anomalyFlag: 1,
+          anomalyFlags: 1,
           semanticVector: 1,
           aiProcessedAt: 1,
           aiError: 1

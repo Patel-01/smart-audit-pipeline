@@ -16,8 +16,9 @@ const auditEntrySchema = new Schema<AuditEntry>({
   },
   coreRevision: { type: Number, default: 0 },
   riskScore: Number,
+  riskLevel: { type: String, enum: ['LOW', 'MEDIUM', 'HIGH'] },
   summary: String,
-  anomalyFlag: Boolean,
+  anomalyFlags: { type: [String], default: [] },
   semanticVector: {
     type: [Number],
     validate: (vector: number[] | undefined) => !vector || vector.length === 8

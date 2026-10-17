@@ -10,7 +10,7 @@ the modules and their concrete adapters.
 ## Run locally
 1. Copy `.env.example` to `.env` and set `MONGODB_URI` to a MongoDB connection string.
 2. `npm ci`
-3. Optionally run `npm run seed` to **add** two synthetic entries. It does not
+3. Optionally run `npm run seed` to **add** four synthetic entries. It does not
    delete existing data; use a non-production database for demos.
 4. `npm run dev` (API at port 4000, Vite at port 5173).
 5. `npm test` runs the unit tests. `npm run build` type-checks both backend and
@@ -34,13 +34,19 @@ engine; `AIWorkerService` delegates polling and concurrency handling to an
 internal worker. Replace the internal deterministic engine with a provider
 adapter when connecting a real AI service.
 
-The similarity endpoint returns the top three completed exceptions ranked by
-cosine similarity of their eight-dimensional vectors. It returns `409` while
-the target entry has no current vector.
+The similarity endpoint (`POST /api/audit-entries/:id/similar`) returns the top
+three completed exceptions ranked by cosine similarity of their
+eight-dimensional vectors. It returns `409` while the target entry has no
+current vector. The React class-component dashboard includes live pipeline
+status, risk levels, summaries, anomaly flags, note fast-track editing, core
+evidence re-analysis, and similarity search. The deterministic local engine
+simulates 400ms of processing by default; configure `AI_PROCESSING_DELAY_MS` to
+change the delay. `MOCK_AI=true` documents the default local assessment mode;
+there is no live provider integration or API key required.
 
 The local demo video in `demo/smart-audit-demo.mp4` was generated
 with synthetic data and an isolated in-memory store, so it does not read or
 modify production audit records. The demo folder is intentionally ignored by
 Git and Docker.
 
-Endpoints: `POST /api/audit-entries`, `GET /api/audit-entries`, `GET /api/audit-entries/:id`, `PUT /api/audit-entries/:id`, `GET /api/audit-entries/:id/similar`, and `GET /healthz`.
+Endpoints: `POST /api/audit-entries`, `GET /api/audit-entries`, `GET /api/audit-entries/:id`, `PUT /api/audit-entries/:id`, `POST /api/audit-entries/:id/similar`, and `GET /healthz`.

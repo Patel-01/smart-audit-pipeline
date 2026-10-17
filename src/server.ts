@@ -16,6 +16,8 @@ const controller = application.auditController;
 app.get('/healthz', (_request, response) => response.json({ status: 'ok' }));
 app.post('/api/audit-entries', controller.create);
 app.get('/api/audit-entries', controller.list);
+app.post('/api/audit-entries/:id/similar', controller.similar);
+// Keep GET compatibility for existing clients while the assessment contract uses POST.
 app.get('/api/audit-entries/:id/similar', controller.similar);
 app.get('/api/audit-entries/:id', controller.get);
 app.put('/api/audit-entries/:id', controller.update);
