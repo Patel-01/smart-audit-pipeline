@@ -7,6 +7,7 @@
     "start": "node dist/server.js",
     "build": "tsc -p tsconfig.server.json && tsc -p tsconfig.client.json && vite build --config vite.config.ts",
     "seed": "tsx src/seed.ts",
+    "migrate:audit-schema": "tsx src/migrate-audit-schema.ts",
     "test": "tsc -p tsconfig.test.json && node --test dist-test/modules/audit/services/AuditMutationPolicy.test.js dist-test/modules/audit/services/AIWorkerService.test.js",
     "typecheck": "tsc -p tsconfig.server.json --noEmit && tsc -p tsconfig.client.json"
   },
@@ -15,7 +16,8 @@
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "formik": "^2.4.9",
-    "mongoose": "^8.7.1"
+    "mongoose": "^8.7.1",
+    "openai": "^7.36.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",

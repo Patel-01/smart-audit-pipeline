@@ -15,7 +15,7 @@ interface AuditEntryRowProps {
   similarError?: string;
   onNoteChange(value: string): void;
   onSaveNotes(): void;
-  onCoreChange(field: 'amount' | 'evidenceText', value: string): void;
+  onCoreChange(field: keyof CoreEntryDraft, value: string): void;
   onRecheckCore(): void;
   onSearchSimilar(): void;
 }
@@ -68,6 +68,8 @@ export default class AuditEntryRow extends React.Component<AuditEntryRowProps> {
                 value={coreDraft?.amount ?? String(entry.amount)} onChange={event => onCoreChange('amount', event.currentTarget.value)} /></label>
               <label>Evidence<input aria-label="Evidence" value={coreDraft?.evidenceText ?? entry.evidenceText}
                 onChange={event => onCoreChange('evidenceText', event.currentTarget.value)} /></label>
+              <label>Control ID<input aria-label="Control ID" value={coreDraft?.controlId ?? entry.controlId}
+                onChange={event => onCoreChange('controlId', event.currentTarget.value)} /></label>
               <Button size="small" disabled={savingCore} onClick={onRecheckCore}>{savingCore ? 'Re-queuing…' : 'Save & re-analyze'}</Button>
             </div>
           </details>

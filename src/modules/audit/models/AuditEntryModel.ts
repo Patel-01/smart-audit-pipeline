@@ -1,32 +1,71 @@
-import mongoose, { Schema } from 'mongoose';
-import type { AuditEntry } from '../domain/AuditEntry.js';
+import mongoose, { Schema, type Types } from 'mongoose';
+import type { AuditStatus, RiskLevel } from '../domain/AuditEntry.js';
 
-const auditEntrySchema = new Schema<AuditEntry>({
-  title: { type: String, required: true, trim: true },
-  vendor: { type: String, required: true, trim: true },
-  amount: { type: Number, required: true, min: 0 },
-  currency: { type: String, default: 'USD', uppercase: true },
-  transactionDate: { type: Date, required: true },
-  evidenceText: { type: String, required: true },
-  auditorNotes: { type: String, default: '' },
+/** MongoDB's persisted shape follows the assessment's baseline evidence schema. */
+export interface AuditMetadataDocument {
+  status: AuditStatus;
+  riskScore?: number;
+  riskLevel?: RiskLevel;
+  aiSummary?: string;
+  anomalyFlags: string[];
+  semanticVector: number[];
+  auditorNotes: string;
+  aiProcessedAt?: Date;
+  coreRevision: number;
+  aiError?: string;
+}
+
+export interface AuditEntryDocument {
+  _id: Types.ObjectId;
+  timestamp: Date;
+  eventType: string;
+  evidenceId: string;
+  entityName: string;
+  description: string;
+  monetaryImpact: number;
+  controlId: string;
+  actorUserId: string;
+  tenantId: Types.ObjectId;
+  currency: string;
+  aiMetadata: AuditMetadataDocument;
+  created: Date;
+  updated: Date;
+}
+
+const auditMetadataSchema = new Schema<AuditMetadataDocument>({
   status: {
     type: String,
     enum: ['PENDING', 'PROCESSING', 'COMPLETED', 'FAILED'],
     default: 'PENDING'
   },
-  coreRevision: { type: Number, default: 0 },
   riskScore: Number,
   riskLevel: { type: String, enum: ['LOW', 'MEDIUM', 'HIGH'] },
-  summary: String,
+  aiSummary: String,
   anomalyFlags: { type: [String], default: [] },
   semanticVector: {
     type: [Number],
     validate: (vector: number[] | undefined) => !vector || vector.length === 8
   },
+  auditorNotes: { type: String, default: '' },
   aiProcessedAt: Date,
+  coreRevision: { type: Number, default: 0 },
   aiError: String
-}, { timestamps: true });
+}, { _id: false });
 
-auditEntrySchema.index({ status: 1, createdAt: 1 });
+const auditEntrySchema = new Schema<AuditEntryDocument>({
+  timestamp: { type: Date, required: true },
+  eventType: { type: String, required: true, trim: true },
+  evidenceId: { type: String, required: true },
+  entityName: { type: String, required: true, trim: true },
+  description: { type: String, required: true, trim: true },
+  monetaryImpact: { type: Number, required: true, min: 0 },
+  controlId: { type: String, required: true, trim: true },
+  actorUserId: { type: String, required: true },
+  tenantId: { type: Schema.Types.ObjectId, required: true, index: true },
+  currency: { type: String, default: 'USD', uppercase: true },
+  aiMetadata: { type: auditMetadataSchema, default: () => ({}) }
+}, { timestamps: { createdAt: 'created', updatedAt: 'updated' } });
 
-export default mongoose.model<AuditEntry>('AuditEntry', auditEntrySchema);
+auditEntrySchema.index({ 'aiMetadata.status': 1, created: 1 });
+
+export default mongoose.model<AuditEntryDocument>('AuditEntry', auditEntrySchema);

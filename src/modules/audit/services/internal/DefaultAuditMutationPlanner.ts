@@ -4,7 +4,7 @@ import type { AuditMutationPlanner, AuditUpdatePlan } from './AuditMutationPlann
 /** Internal request validation and field classification for audit mutations. */
 export default class DefaultAuditMutationPlanner implements AuditMutationPlanner {
   private readonly coreFields = [
-    'title', 'vendor', 'amount', 'currency', 'transactionDate', 'evidenceText'
+    'title', 'vendor', 'amount', 'currency', 'transactionDate', 'evidenceText', 'controlId'
   ] as const;
 
   create(payload: unknown): NewAuditEntry {
@@ -18,6 +18,7 @@ export default class DefaultAuditMutationPlanner implements AuditMutationPlanner
       currency: body.currency === undefined ? 'USD' : this.nonEmptyString(body.currency, 'currency').toUpperCase(),
       transactionDate: this.date(body.transactionDate),
       evidenceText: this.nonEmptyString(body.evidenceText, 'evidenceText'),
+      controlId: body.controlId === undefined ? 'UNASSIGNED' : this.nonEmptyString(body.controlId, 'controlId'),
       ...(body.auditorNotes === undefined ? {} : { auditorNotes: this.string(body.auditorNotes, 'auditorNotes') })
     };
   }
@@ -39,6 +40,7 @@ export default class DefaultAuditMutationPlanner implements AuditMutationPlanner
     if ('currency' in body) changes.currency = this.nonEmptyString(body.currency, 'currency').toUpperCase();
     if ('transactionDate' in body) changes.transactionDate = this.date(body.transactionDate);
     if ('evidenceText' in body) changes.evidenceText = this.nonEmptyString(body.evidenceText, 'evidenceText');
+    if ('controlId' in body) changes.controlId = this.nonEmptyString(body.controlId, 'controlId');
     if ('auditorNotes' in body) changes.auditorNotes = this.string(body.auditorNotes, 'auditorNotes');
     return { kind: 'core', changes };
   }

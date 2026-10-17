@@ -12,7 +12,8 @@ const emptyForm: NewEntryFormState = {
   title: '',
   vendor: '',
   amount: '',
-  evidenceText: ''
+  evidenceText: '',
+  controlId: ''
 };
 
 export default class NewEvidenceForm extends React.Component<NewEvidenceFormProps> {
@@ -22,6 +23,7 @@ export default class NewEvidenceForm extends React.Component<NewEvidenceFormProp
     if (!values.title.trim()) errors.title = 'Enter an item title.';
     if (!values.vendor.trim()) errors.vendor = 'Enter a vendor or entity.';
     if (!values.evidenceText.trim()) errors.evidenceText = 'Describe the evidence.';
+    if (!values.controlId.trim()) errors.controlId = 'Enter a control ID.';
 
     const amount = Number(values.amount);
     if (!values.amount || !Number.isFinite(amount) || amount < 0) {
@@ -41,6 +43,7 @@ export default class NewEvidenceForm extends React.Component<NewEvidenceFormProp
       <Formik<NewEntryFormState>
         initialValues={emptyForm}
         validate={this.validate}
+        validateOnBlur={false}
         onSubmit={onSubmit}
       >
         {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
@@ -56,6 +59,10 @@ export default class NewEvidenceForm extends React.Component<NewEvidenceFormProp
             <label>Amount (USD)
               <input name="amount" type="number" min="0" step="0.01" value={values.amount} onChange={handleChange} onBlur={handleBlur} placeholder="12500" aria-invalid={Boolean(touched.amount && errors.amount)} aria-describedby={touched.amount && errors.amount ? 'amount-error' : undefined} />
               {touched.amount && errors.amount && <span className="field-error" id="amount-error">{errors.amount}</span>}
+            </label>
+            <label>Control ID
+              <input name="controlId" value={values.controlId} onChange={handleChange} onBlur={handleBlur} placeholder="e.g. CTRL-FIN-302" aria-invalid={Boolean(touched.controlId && errors.controlId)} aria-describedby={touched.controlId && errors.controlId ? 'control-error' : undefined} />
+              {touched.controlId && errors.controlId && <span className="field-error" id="control-error">{errors.controlId}</span>}
             </label>
             <label className="evidence-field">Evidence description
               <input name="evidenceText" value={values.evidenceText} onChange={handleChange} onBlur={handleBlur} placeholder="Describe the transaction or control evidence" aria-invalid={Boolean(touched.evidenceText && errors.evidenceText)} aria-describedby={touched.evidenceText && errors.evidenceText ? 'evidence-error' : undefined} />

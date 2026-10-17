@@ -22,6 +22,7 @@ class InMemoryStore implements AuditStore {
     currency: 'USD',
     transactionDate: new Date('2026-09-25'),
     evidenceText: 'Urgent duplicate invoice.',
+    controlId: 'CTRL-FIN-302',
     auditorNotes: '',
     status: 'PENDING',
     coreRevision: 0,

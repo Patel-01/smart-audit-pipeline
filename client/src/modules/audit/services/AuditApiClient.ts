@@ -22,9 +22,9 @@ export default class AuditApiClient {
     await this.http.put(`/api/audit-entries/${id}`, { auditorNotes: notes });
   }
 
-  async updateCore(id: string, amount: string, evidenceText: string): Promise<void> {
+  async updateCore(id: string, amount: string, evidenceText: string, controlId: string): Promise<void> {
     await this.http.put(`/api/audit-entries/${id}`, {
-      amount: Number(amount), evidenceText
+      amount: Number(amount), evidenceText, controlId
     });
   }
 

@@ -15,7 +15,7 @@ interface AuditStreamProps {
   similarErrors: Record<string, string>;
   onNoteChange(id: string, value: string): void;
   onSaveNotes(entry: AuditEntryView): void;
-  onCoreChange(entry: AuditEntryView, field: 'amount' | 'evidenceText', value: string): void;
+  onCoreChange(entry: AuditEntryView, field: keyof CoreEntryDraft, value: string): void;
   onRecheckCore(entry: AuditEntryView): void;
   onSearchSimilar(id: string): void;
 }

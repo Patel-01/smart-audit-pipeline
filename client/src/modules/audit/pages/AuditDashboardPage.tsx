@@ -96,6 +96,7 @@ export default class AuditDashboard extends React.Component<object, DashboardSta
         [entry._id]: {
           amount: state.coreDrafts[entry._id]?.amount ?? String(entry.amount),
           evidenceText: state.coreDrafts[entry._id]?.evidenceText ?? entry.evidenceText,
+          controlId: state.coreDrafts[entry._id]?.controlId ?? entry.controlId,
           [field]: value
         }
       }
@@ -104,11 +105,11 @@ export default class AuditDashboard extends React.Component<object, DashboardSta
 
   private recheckCore = async (entry: AuditEntryView): Promise<void> => {
     const draft = this.state.coreDrafts[entry._id] ?? {
-      amount: String(entry.amount), evidenceText: entry.evidenceText
+      amount: String(entry.amount), evidenceText: entry.evidenceText, controlId: entry.controlId
     };
     this.setState({ savingCoreId: entry._id, error: undefined });
     try {
-      await this.api.updateCore(entry._id, draft.amount, draft.evidenceText);
+      await this.api.updateCore(entry._id, draft.amount, draft.evidenceText, draft.controlId);
       this.setState(state => {
         const coreDrafts = { ...state.coreDrafts };
         delete coreDrafts[entry._id];

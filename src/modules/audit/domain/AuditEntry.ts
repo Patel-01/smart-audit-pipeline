@@ -10,6 +10,7 @@ export interface AuditCoreFields {
   currency: string;
   transactionDate: Date;
   evidenceText: string;
+  controlId: string;
 }
 
 export interface AuditEnrichment {

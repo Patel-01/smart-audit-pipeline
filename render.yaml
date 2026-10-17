@@ -10,5 +10,7 @@ services:
         value: production
       - key: AI_WORKER_INTERVAL_MS
         value: "1000"
+      - key: AI_PROVIDER
+        value: mock
       - key: MONGODB_URI
         sync: false

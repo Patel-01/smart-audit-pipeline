@@ -9,6 +9,7 @@ export interface AuditEntryView {
   currency: string;
   transactionDate: string;
   evidenceText: string;
+  controlId: string;
   auditorNotes: string;
   status: AuditStatus;
   riskScore?: number;
@@ -26,9 +27,11 @@ export interface NewEntryFormState {
   vendor: string;
   amount: string;
   evidenceText: string;
+  controlId: string;
 }
 
 export interface CoreEntryDraft {
   amount: string;
   evidenceText: string;
+  controlId: string;
 }

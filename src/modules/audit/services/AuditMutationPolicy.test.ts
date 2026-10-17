@@ -33,7 +33,8 @@ test('creation requires valid financial evidence', () => {
     vendor: 'Acme Supplies',
     amount: 12_500,
     transactionDate: '2026-09-25',
-    evidenceText: 'Possible duplicate.'
+    evidenceText: 'Possible duplicate.',
+    controlId: 'CTRL-FIN-302'
   });
   assert.equal(input.currency, 'USD');
   assert.ok(input.transactionDate instanceof Date);
