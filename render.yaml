@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: smart-audit-pipeline
+    runtime: docker
+    plan: free
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: AI_WORKER_INTERVAL_MS
+        value: "1000"
+      - key: MONGODB_URI
+        sync: false
