@@ -5,6 +5,8 @@ keeps HTTP handling, update decisions, persistence, enrichment, and background
 orchestration in separate classes. Top-level services expose those business
 actions; their implementation mechanics live under `src/services/internal`.
 The assessment AI engine is deterministic and does not call an external provider.
+`ApplicationContainer` is the composition root: it creates the Mongo repository,
+internal implementations, and public service façades in one place.
 
 ## Run locally
 1. Copy `.env.example` to `.env` and set `MONGODB_URI` to a MongoDB connection string.

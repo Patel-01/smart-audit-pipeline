@@ -1,8 +1,9 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { AuditMutationPolicy } from './AuditMutationPolicy.js';
+import DefaultAuditMutationPlanner from './internal/DefaultAuditMutationPlanner.js';
 
-const policy = new AuditMutationPolicy();
+const policy = new AuditMutationPolicy(new DefaultAuditMutationPlanner());
 
 test('note-only edits bypass the AI queue', () => {
   assert.deepEqual(policy.update({ auditorNotes: 'Reviewed by auditor' }), {

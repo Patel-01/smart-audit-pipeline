@@ -5,7 +5,7 @@ import { AuditMutationPolicy } from '../services/AuditMutationPolicy.js';
 export default class AuditController {
   constructor(
     private readonly repository: AuditStore,
-    private readonly policy = new AuditMutationPolicy()
+    private readonly policy: AuditMutationPolicy
   ) {}
 
   create = async (request: Request, response: Response, next: NextFunction): Promise<void> => {

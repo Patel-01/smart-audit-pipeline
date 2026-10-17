@@ -1,8 +1,9 @@
 import type { AuditStore } from '../../repositories/AuditStore.js';
 import AIService from '../AIService.js';
+import type { AuditWorkerRuntime } from './AuditWorkerRuntime.js';
 
 /** Polling, concurrency control, and stale-result protection for the worker. */
-export default class PendingAuditWorker {
+export default class PendingAuditWorker implements AuditWorkerRuntime {
   private timer?: ReturnType<typeof setInterval>;
   private running = false;
 

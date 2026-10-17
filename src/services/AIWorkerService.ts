@@ -1,14 +1,10 @@
 import type { AuditStore } from '../repositories/AuditStore.js';
 import AIService from './AIService.js';
-import PendingAuditWorker from './internal/PendingAuditWorker.js';
+import type { AuditWorkerRuntime } from './internal/AuditWorkerRuntime.js';
 
 /** Runs background risk enrichment for pending audit entries. */
 export default class AIWorkerService {
-  private readonly worker: PendingAuditWorker;
-
-  constructor(repository: AuditStore, aiService: AIService, intervalMs = 1000) {
-    this.worker = new PendingAuditWorker(repository, aiService, intervalMs);
-  }
+  constructor(private readonly worker: AuditWorkerRuntime) {}
 
   start(): this {
     this.worker.start();
