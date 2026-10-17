@@ -12,5 +12,7 @@ services:
         value: "1000"
       - key: AI_PROVIDER
         value: mock
+      - key: VECTOR_SEARCH_INDEX_NAME
+        value: audit-entry-vector-index
       - key: MONGODB_URI
         sync: false
