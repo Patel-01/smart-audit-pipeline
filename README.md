@@ -2,8 +2,9 @@
 
 SmartAudit is an Express/React application written in TypeScript. The backend
 keeps HTTP handling, update decisions, persistence, enrichment, and background
-orchestration in separate classes. The AI adapter is deterministic for the
-assessment; it does not call an external provider.
+orchestration in separate classes. Top-level services expose those business
+actions; their implementation mechanics live under `src/services/internal`.
+The assessment AI engine is deterministic and does not call an external provider.
 
 ## Run locally
 1. Copy `.env.example` to `.env` and set `MONGODB_URI` to a MongoDB connection string.
@@ -22,12 +23,15 @@ Push this repository to GitHub, create a Render Blueprint from it, and provide `
 
 The API accepts raw evidence and returns `202` while the worker processes it.
 `AuditMutationPolicy` distinguishes auditor-note edits from financial/evidence
-edits. Notes use a targeted `$set` without changing AI status. Core edits use
+edits. `AuditMutationPolicy` delegates validation and field classification to
+an internal planner. Notes use a targeted `$set` without changing AI status. Core edits use
 `$set` and `$inc` to requeue enrichment and advance `coreRevision`. A worker
 claims one pending record atomically; its result is written only if that
 revision is still current. This prevents a stale in-flight result from
-overwriting a newer edit. AI is deterministic and local for review; replace
-`AIService` with a provider adapter for real AI integration.
+overwriting a newer edit. `AIService` delegates enrichment to an internal
+engine; `AIWorkerService` delegates polling and concurrency handling to an
+internal worker. Replace the internal deterministic engine with a provider
+adapter when connecting a real AI service.
 
 The similarity endpoint returns the top three completed exceptions ranked by
 cosine similarity of their eight-dimensional vectors. It returns `409` while
