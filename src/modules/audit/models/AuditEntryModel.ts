@@ -44,7 +44,7 @@ const auditMetadataSchema = new Schema<AuditMetadataDocument>({
   anomalyFlags: { type: [String], default: [] },
   semanticVector: {
     type: [Number],
-    validate: (vector: number[] | undefined) => !vector || vector.length === 8
+    validate: (vector: number[] | undefined) => !vector || vector.length === 0 || vector.length === 8
   },
   auditorNotes: { type: String, default: '' },
   aiProcessedAt: Date,
