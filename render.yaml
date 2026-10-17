@@ -3,6 +3,7 @@ services:
     name: smart-audit-pipeline
     runtime: docker
     plan: free
+    region: singapore
     healthCheckPath: /healthz
     envVars:
       - key: NODE_ENV
