@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from 'express';
-import type { AuditStore } from '../repositories/AuditStore.js';
+import type { AuditStore } from '../ports/AuditStore.js';
 import { AuditMutationPolicy } from '../services/AuditMutationPolicy.js';
 
 export default class AuditController {

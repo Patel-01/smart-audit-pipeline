@@ -1,4 +1,4 @@
-import type { AuditEnrichment, AuditEntry } from '../../domain/AuditEntry.js';
+import type { AuditEnrichment, AuditEntry } from '../../../audit/domain/AuditEntry.js';
 
 /** Internal boundary for the implementation behind AIService. */
 export interface EnrichmentEngine {

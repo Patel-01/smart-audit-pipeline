@@ -1,5 +1,3 @@
-import type { AuditStore } from '../repositories/AuditStore.js';
-import AIService from './AIService.js';
 import type { AuditWorkerRuntime } from './internal/AuditWorkerRuntime.js';
 
 /** Runs background risk enrichment for pending audit entries. */

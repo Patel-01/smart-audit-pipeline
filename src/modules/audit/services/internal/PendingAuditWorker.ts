@@ -1,5 +1,5 @@
-import type { AuditStore } from '../../repositories/AuditStore.js';
-import AIService from '../AIService.js';
+import type { AuditStore } from '../../ports/AuditStore.js';
+import type { AuditEnricher } from '../../ports/AuditEnricher.js';
 import type { AuditWorkerRuntime } from './AuditWorkerRuntime.js';
 
 /** Polling, concurrency control, and stale-result protection for the worker. */
@@ -9,7 +9,7 @@ export default class PendingAuditWorker implements AuditWorkerRuntime {
 
   constructor(
     private readonly repository: AuditStore,
-    private readonly aiService: AIService,
+    private readonly enricher: AuditEnricher,
     private readonly intervalMs: number
   ) {}
 
@@ -36,7 +36,7 @@ export default class PendingAuditWorker implements AuditWorkerRuntime {
 
       const revision = entry.coreRevision ?? 0;
       try {
-        const enrichment = await this.aiService.enrich(entry);
+        const enrichment = await this.enricher.enrich(entry);
         // Core edits advance the revision and invalidate this in-flight result.
         await this.repository.updateAI(String(entry._id), revision, enrichment);
       } catch (error) {

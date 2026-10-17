@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import mongoose from 'mongoose';
-import AuditEntryModel from './models/AuditEntry.js';
+import AuditEntryModel from './modules/audit/models/AuditEntryModel.js';
 
 const mongoUri = process.env.MONGODB_URI ?? 'mongodb://127.0.0.1:27017/smart-audit';
 await mongoose.connect(mongoUri);

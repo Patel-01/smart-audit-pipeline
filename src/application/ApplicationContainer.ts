@@ -1,11 +1,11 @@
-import AuditController from '../controllers/AuditController.js';
-import AuditRepository from '../repositories/AuditRepository.js';
-import AIService from '../services/AIService.js';
-import AIWorkerService from '../services/AIWorkerService.js';
-import { AuditMutationPolicy } from '../services/AuditMutationPolicy.js';
-import DeterministicEnrichmentEngine from '../services/internal/DeterministicEnrichmentEngine.js';
-import DefaultAuditMutationPlanner from '../services/internal/DefaultAuditMutationPlanner.js';
-import PendingAuditWorker from '../services/internal/PendingAuditWorker.js';
+import AuditController from '../modules/audit/controllers/AuditController.js';
+import AuditRepository from '../modules/audit/repositories/AuditRepository.js';
+import AIService from '../modules/ai-enrichment/services/AIService.js';
+import AIWorkerService from '../modules/audit/services/AIWorkerService.js';
+import { AuditMutationPolicy } from '../modules/audit/services/AuditMutationPolicy.js';
+import DeterministicEnrichmentEngine from '../modules/ai-enrichment/services/internal/DeterministicEnrichmentEngine.js';
+import DefaultAuditMutationPlanner from '../modules/audit/services/internal/DefaultAuditMutationPlanner.js';
+import PendingAuditWorker from '../modules/audit/services/internal/PendingAuditWorker.js';
 
 /** Composition root: creates concrete adapters and wires application services. */
 export default class ApplicationContainer {

@@ -7,7 +7,7 @@
     "start": "node dist/server.js",
     "build": "tsc -p tsconfig.server.json && tsc -p tsconfig.client.json && vite build --config vite.config.ts",
     "seed": "tsx src/seed.ts",
-    "test": "tsc -p tsconfig.test.json && node --test dist-test/services/AuditMutationPolicy.test.js dist-test/services/AIWorkerService.test.js",
+    "test": "tsc -p tsconfig.test.json && node --test dist-test/modules/audit/services/AuditMutationPolicy.test.js dist-test/modules/audit/services/AIWorkerService.test.js",
     "typecheck": "tsc -p tsconfig.server.json --noEmit && tsc -p tsconfig.client.json"
   },
   "dependencies": {

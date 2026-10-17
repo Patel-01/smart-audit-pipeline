@@ -1,4 +1,4 @@
-import AuditEntryModel from '../models/AuditEntry.js';
+import AuditEntryModel from '../models/AuditEntryModel.js';
 import type {
   AuditCoreChanges,
   AuditEnrichment,
@@ -6,7 +6,7 @@ import type {
   NewAuditEntry,
   SimilarAuditEntry
 } from '../domain/AuditEntry.js';
-import type { AuditStore } from './AuditStore.js';
+import type { AuditStore } from '../ports/AuditStore.js';
 
 export default class AuditRepository implements AuditStore {
   async create(input: NewAuditEntry): Promise<AuditEntry> {

@@ -1,4 +1,4 @@
-import type { AuditEnrichment, AuditEntry } from '../../domain/AuditEntry.js';
+import type { AuditEnrichment, AuditEntry } from '../../../audit/domain/AuditEntry.js';
 import type { EnrichmentEngine } from './EnrichmentEngine.js';
 
 /** Local deterministic implementation used for demos and assessment review. */

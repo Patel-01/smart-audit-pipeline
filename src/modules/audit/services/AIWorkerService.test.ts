@@ -2,14 +2,15 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { Types } from 'mongoose';
 import type { AuditCoreChanges, AuditEnrichment, AuditEntry } from '../domain/AuditEntry.js';
-import type { AuditStore } from '../repositories/AuditStore.js';
-import AIService from './AIService.js';
+import type { AuditStore } from '../ports/AuditStore.js';
+import type { AuditEnricher } from '../ports/AuditEnricher.js';
+import AIService from '../../ai-enrichment/services/AIService.js';
 import AIWorkerService from './AIWorkerService.js';
-import DeterministicEnrichmentEngine from './internal/DeterministicEnrichmentEngine.js';
+import DeterministicEnrichmentEngine from '../../ai-enrichment/services/internal/DeterministicEnrichmentEngine.js';
 import PendingAuditWorker from './internal/PendingAuditWorker.js';
 
 const createAIService = () => new AIService(new DeterministicEnrichmentEngine());
-const createWorkerService = (store: AuditStore, aiService = createAIService()) =>
+const createWorkerService = (store: AuditStore, aiService: AuditEnricher = createAIService()) =>
   new AIWorkerService(new PendingAuditWorker(store, aiService, 1000));
 
 class InMemoryStore implements AuditStore {
@@ -69,9 +70,9 @@ test('worker writes enrichment to a claimed pending record', async () => {
 test('an in-flight AI result cannot overwrite a newer financial edit', async () => {
   const store = new InMemoryStore();
   let resolveEnrichment!: (value: AuditEnrichment) => void;
-  const delayedAIService = new AIService({
+  const delayedAIService: AuditEnricher = {
     enrich: () => new Promise(resolve => { resolveEnrichment = resolve; })
-  });
+  };
   const worker = createWorkerService(store, delayedAIService);
 
   const processing = worker.processOne();

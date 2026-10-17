@@ -1,12 +1,11 @@
 # AI-Enriched Continuous Audit Pipeline
 
-SmartAudit is an Express/React application written in TypeScript. The backend
-keeps HTTP handling, update decisions, persistence, enrichment, and background
-orchestration in separate classes. Top-level services expose those business
-actions; their implementation mechanics live under `src/services/internal`.
-The assessment AI engine is deterministic and does not call an external provider.
-`ApplicationContainer` is the composition root: it creates the Mongo repository,
-internal implementations, and public service façades in one place.
+SmartAudit is an Express/React application written in TypeScript. The backend is
+organized by business capability: `src/modules/audit` owns audit records,
+persistence, mutation rules, and the enrichment contract; `src/modules/ai-enrichment`
+implements enrichment behind that contract. Their implementation details stay
+inside each module. `ApplicationContainer` is the composition root that connects
+the modules and their concrete adapters.
 
 ## Run locally
 1. Copy `.env.example` to `.env` and set `MONGODB_URI` to a MongoDB connection string.
@@ -25,8 +24,8 @@ Push this repository to GitHub, create a Render Blueprint from it, and provide `
 
 The API accepts raw evidence and returns `202` while the worker processes it.
 `AuditMutationPolicy` distinguishes auditor-note edits from financial/evidence
-edits. `AuditMutationPolicy` delegates validation and field classification to
-an internal planner. Notes use a targeted `$set` without changing AI status. Core edits use
+edits and delegates validation and field classification to an internal planner.
+Notes use a targeted `$set` without changing AI status. Core edits use
 `$set` and `$inc` to requeue enrichment and advance `coreRevision`. A worker
 claims one pending record atomically; its result is written only if that
 revision is still current. This prevents a stale in-flight result from
