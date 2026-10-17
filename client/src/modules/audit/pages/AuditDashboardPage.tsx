@@ -11,7 +11,6 @@ interface DashboardState {
   loading: boolean;
   saving: boolean;
   error?: string;
-  form: NewEntryFormState;
   noteDrafts: Record<string, string>;
   coreDrafts: Record<string, CoreEntryDraft>;
   savingNotesId?: string;
@@ -22,12 +21,10 @@ interface DashboardState {
   similarErrors: Record<string, string>;
 }
 
-const emptyForm: NewEntryFormState = { title: '', vendor: '', amount: '', evidenceText: '' };
-
 /** Page-level coordinator: owns request state and composes focused UI components. */
 export default class AuditDashboard extends React.Component<object, DashboardState> {
   state: DashboardState = {
-    entries: [], loading: true, saving: false, form: emptyForm,
+    entries: [], loading: true, saving: false,
     noteDrafts: {}, coreDrafts: {}, similarResults: {}, similarErrors: {}
   };
 
@@ -60,20 +57,15 @@ export default class AuditDashboard extends React.Component<object, DashboardSta
     }
   }
 
-  private updateForm = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const { name, value } = event.currentTarget;
-    this.setState(state => ({ form: { ...state.form, [name]: value } }));
-  };
-
-  private createEntry = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
-    event.preventDefault();
+  private createEntry = async (form: NewEntryFormState): Promise<void> => {
     this.setState({ saving: true, error: undefined });
     try {
-      await this.api.createEntry(this.state.form);
-      this.setState({ form: emptyForm, saving: false });
+      await this.api.createEntry(form);
+      this.setState({ saving: false });
       await this.refresh();
     } catch (error) {
       this.setState({ saving: false, error: this.message(error) });
+      throw error;
     }
   };
 
@@ -149,14 +141,13 @@ export default class AuditDashboard extends React.Component<object, DashboardSta
   }
 
   render(): React.ReactNode {
-    const { entries, loading, saving, error, form, noteDrafts, coreDrafts,
+    const { entries, loading, saving, error, noteDrafts, coreDrafts,
       savingNotesId, savingCoreId, similarForId, similarLoadingId,
       similarResults, similarErrors } = this.state;
     return <main className="app-shell">
       <DashboardHeader onRefresh={() => void this.refresh()} />
       <AuditOverview entries={entries} />
-      <NewEvidenceForm form={form} saving={saving} onChange={this.updateForm}
-        onSubmit={event => void this.createEntry(event)} />
+      <NewEvidenceForm saving={saving} onSubmit={this.createEntry} />
       {error && <div className="alert" role="alert">{error}</div>}
       <AuditStream
         entries={entries} loading={loading} noteDrafts={noteDrafts} coreDrafts={coreDrafts}
