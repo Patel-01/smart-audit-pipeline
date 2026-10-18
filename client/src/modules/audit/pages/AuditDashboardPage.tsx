@@ -9,6 +9,7 @@ import AuditStream from '../components/AuditStream.js';
 interface DashboardState {
   entries: AuditEntryView[];
   loading: boolean;
+  manualRefreshing: boolean;
   saving: boolean;
   error?: string;
   noteDrafts: Record<string, string>;
@@ -24,13 +25,13 @@ interface DashboardState {
 /** Page-level coordinator: owns request state and composes focused UI components. */
 export default class AuditDashboard extends React.Component<object, DashboardState> {
   state: DashboardState = {
-    entries: [], loading: true, saving: false,
+    entries: [], loading: true, manualRefreshing: false, saving: false,
     noteDrafts: {}, coreDrafts: {}, similarResults: {}, similarErrors: {}
   };
 
   private readonly api = new AuditApiClient();
   private poll?: ReturnType<typeof setInterval>;
-  private refreshing = false;
+  private refreshRequest?: Promise<void>;
   private mounted = false;
 
   componentDidMount(): void {
@@ -44,17 +45,22 @@ export default class AuditDashboard extends React.Component<object, DashboardSta
     if (this.poll) clearInterval(this.poll);
   }
 
-  private async refresh(): Promise<void> {
-    if (this.refreshing) return;
-    this.refreshing = true;
-    try {
-      const entries = await this.api.listEntries();
-      if (this.mounted) this.setState({ entries, loading: false, error: undefined });
-    } catch (error) {
-      if (this.mounted) this.setState({ loading: false, error: this.message(error) });
-    } finally {
-      this.refreshing = false;
+  private refresh(showIndicator = false): Promise<void> {
+    if (showIndicator && this.mounted) this.setState({ manualRefreshing: true });
+    if (!this.refreshRequest) {
+      this.refreshRequest = (async () => {
+        try {
+          const entries = await this.api.listEntries();
+          if (this.mounted) this.setState({ entries, loading: false, error: undefined });
+        } catch (error) {
+          if (this.mounted) this.setState({ loading: false, error: this.message(error) });
+        } finally {
+          this.refreshRequest = undefined;
+          if (this.mounted) this.setState({ manualRefreshing: false });
+        }
+      })();
     }
+    return this.refreshRequest;
   }
 
   private createEntry = async (form: NewEntryFormState): Promise<void> => {
@@ -142,11 +148,11 @@ export default class AuditDashboard extends React.Component<object, DashboardSta
   }
 
   render(): React.ReactNode {
-    const { entries, loading, saving, error, noteDrafts, coreDrafts,
+    const { entries, loading, manualRefreshing, saving, error, noteDrafts, coreDrafts,
       savingNotesId, savingCoreId, similarForId, similarLoadingId,
       similarResults, similarErrors } = this.state;
     return <main className="app-shell">
-      <DashboardHeader onRefresh={() => void this.refresh()} />
+      <DashboardHeader onRefresh={() => void this.refresh(true)} refreshing={manualRefreshing} />
       <AuditOverview entries={entries} />
       <NewEvidenceForm saving={saving} onSubmit={this.createEntry} />
       {error && <div className="alert" role="alert">{error}</div>}

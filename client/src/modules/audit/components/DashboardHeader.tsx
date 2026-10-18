@@ -3,6 +3,7 @@ import Button from '../../../shared/components/Button.js';
 
 interface DashboardHeaderProps {
   onRefresh(): void;
+  refreshing: boolean;
 }
 
 export default class DashboardHeader extends React.Component<DashboardHeaderProps> {
@@ -19,7 +20,16 @@ export default class DashboardHeader extends React.Component<DashboardHeaderProp
           <h1>Audit intelligence</h1>
           <p className="subheading">Evidence in. Risk signals out. Review exceptions as they happen.</p>
         </div>
-        <Button variant="quiet" onClick={this.props.onRefresh}>↻ Refresh stream</Button>
+        <Button
+          variant="quiet"
+          onClick={this.props.onRefresh}
+          disabled={this.props.refreshing}
+          aria-busy={this.props.refreshing}
+          aria-label={this.props.refreshing ? 'Refreshing audit stream' : 'Refresh audit stream'}
+        >
+          <span className={`refresh-icon${this.props.refreshing ? ' is-spinning' : ''}`} aria-hidden="true">↻</span>
+          {this.props.refreshing ? 'Refreshing…' : 'Refresh stream'}
+        </Button>
       </section>
     </>;
   }
